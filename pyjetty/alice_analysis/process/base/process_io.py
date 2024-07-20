@@ -68,6 +68,7 @@ class ProcessIO(common_base.CommonBase):
       self.event_columns += ['centrality']
       self.min_centrality = min_cent
       self.max_centrality = max_cent
+    self.event_columns += ['V0Amult']
     if is_jetscape:
       self.event_columns += ['event_plane_angle']
     
@@ -105,7 +106,7 @@ class ProcessIO(common_base.CommonBase):
     print('Convert ROOT trees to pandas dataframes...')
     print('    track_tree_name = {}'.format(self.track_tree_name))
 
-    self.track_df = self.load_dataframe()
+    self.track_df, self.event_df = self.load_dataframe()
     
     if self.reject_tracks_fraction > 1e-3:
       n_remove = int(reject_tracks_fraction * len(self.track_df.index))
@@ -120,7 +121,7 @@ class ProcessIO(common_base.CommonBase):
 
     df_fjparticles = self.group_fjparticles(m, offset_indices, group_by_evid, random_mass, min_pt=min_pt)
 
-    return df_fjparticles
+    return df_fjparticles, self.event_df
   
   #---------------------------------------------------------------
   # Convert ROOT TTree to pandas dataframe
@@ -201,7 +202,7 @@ class ProcessIO(common_base.CommonBase):
     if n_duplicates > 0:
       sys.exit('ERROR: There appear to be {} duplicate particles in the merged dataframe'.format(n_duplicates))
       
-    return self.track_df
+    return self.track_df, event_df
 
   #---------------------------------------------------------------
   # Opposite operation as load_dataframe above. Takes a dataframe

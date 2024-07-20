@@ -1,0 +1,13 @@
+# Configuration to download LHC18q data
+# (to be used by download_data.py)
+
+period: 'LHC17q' # pass2
+period_out: 'LHC17q_CENT_wSDD'
+parent_dir: 'data'
+year: '2017'
+train_name: 'HF_TreeCreator'
+train_PWG: 'pass1_CENT_wSDD/AOD234/PWGHF'
+train_number: '779_20230601-2257_child_6'
+runlist: ['000282365', '000282366', '000282367']
+
+output_dir: '/rstorage/alice/data/LHC17pq/779'

@@ -49,7 +49,7 @@ def scaleHistograms(configFile, remove_unscaled):
   nEventsSum = 0
   for bin in range(1, EndPtHardBin+1):
     f = ROOT.TFile("{}/AnalysisResults.root".format(bin), "UPDATE")
-    hNevents = f.Get("hNevents")
+    hNevents = f.Get("hNevents").Clone()
     nEvents = hNevents.GetBinContent(2)
     nEventsSum += nEvents
   nEventsAvg = nEventsSum*1./EndPtHardBin
@@ -57,7 +57,6 @@ def scaleHistograms(configFile, remove_unscaled):
 
   for bin in range(1, EndPtHardBin+1):
     print("ooo Scaling Pt-hard bin {} of {}".format(bin, EndPtHardBin))
-
     f = ROOT.TFile("{}/AnalysisResults.root".format(bin), "UPDATE")
     hCrossSection = config[bin]
     nEvents = f.Get("hNevents").GetBinContent(2)

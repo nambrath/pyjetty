@@ -70,9 +70,15 @@ class ProcessIO_Emb(common_base.CommonBase):
   def load_event(self):
       
     if self.current_event_index >= self.current_file_nevents:
-        self.load_file()
-        
-    current_event = self.current_file_df.iloc[self.current_event_index]
+        self.load_file()    
+        while self.current_file_nevents==0:
+          self.load_file()
+    
+    try:
+      current_event = self.current_file_df.iloc[self.current_event_index]
+    except IndexError:
+      print(self.current_event_index, self.current_file_df.empty)
+    
     self.current_event_index += 1
     #print('Get Pb-Pb event {}/{}'.format(self.current_event_index, self.current_file_nevents))
     return current_event
@@ -86,6 +92,9 @@ class ProcessIO_Emb(common_base.CommonBase):
     input_file = random.choice(self.list_of_files)
     if self.remove_used_file:
       self.list_of_files.remove(input_file)
+    print(input_file)
+    if '/global' not in input_file:
+      input_file = '/global/cfs/projectdirs/alice/alicepro/hiccup'+input_file
     print('Opening Pb-Pb file: {}'.format(input_file))
 
     io = process_io.ProcessIO(input_file=input_file, track_tree_name=self.track_tree_name,
